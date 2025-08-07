@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Flask App{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-header">
+        <div class="user-info">
+            <div class="user-avatar">
+                {{ user.username[0].upper() }}
+            </div>
+            <div>
+                <h2>Welcome, {{ user.username }}!</h2>
+                <p style="color: #666; margin: 0;">{{ user.email }}</p>
+            </div>
+        </div>
+        <a href="{{ url_for('logout') }}" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+
+    <div class="stats">
+        <div class="stat-card">
+            <h3>{{ user.id }}</h3>
+            <p>User ID</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ user.created_at.strftime('%Y-%m-%d') }}</h3>
+            <p>Member Since</p>
+        </div>
+        <div class="stat-card">
+            <h3>Active</h3>
+            <p>Status</p>
+        </div>
+    </div>
+
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-top: 20px;">
+        <h3 style="color: #333; margin-bottom: 15px;">
+            <i class="fas fa-info-circle"></i> Account Information
+        </h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+            <div>
+                <strong>Username:</strong> {{ user.username }}
+            </div>
+            <div>
+                <strong>Email:</strong> {{ user.email }}
+            </div>
+            <div>
+                <strong>Account Created:</strong> {{ user.created_at.strftime('%B %d, %Y at %I:%M %p') }}
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px; text-align: center;">
+        <h3 style="color: #333; margin-bottom: 15px;">
+            <i class="fas fa-cog"></i> Quick Actions
+        </h3>
+        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+            <a href="{{ url_for('create_post') }}" class="btn" style="max-width: 200px; text-decoration: none;">
+                <i class="fas fa-edit"></i> Create Post
+            </a>
+            <a href="{{ url_for('posts') }}" class="btn" style="max-width: 200px; text-decoration: none;">
+                <i class="fas fa-newspaper"></i> View Posts
+            </a>
+            <a href="{{ url_for('notifications') }}" class="btn" style="max-width: 200px; text-decoration: none; position: relative;">
+                <i class="fas fa-bell"></i> Notifications
+                {% set unread_count = user.notifications|selectattr('is_read', 'equalto', false)|list|length %}
+                {% if unread_count > 0 %}
+                <span style="position: absolute; top: -5px; right: -5px; background: #dc3545; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold;">{{ unread_count }}</span>
+                {% endif %}
+            </a>
+        </div>
+    </div>
+
+    {% if posts %}
+    <div style="margin-top: 30px;">
+        <h3 style="color: #333; margin-bottom: 15px;">
+            <i class="fas fa-history"></i> Your Recent Posts
+        </h3>
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            {% for post in posts %}
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #667eea;">
+                <h4 style="margin: 0 0 10px 0; color: #333;">{{ post.title }}</h4>
+                <p style="margin: 0 0 10px 0; color: #666; font-size: 0.9rem;">
+                    {{ post.created_at.strftime('%B %d, %Y at %I:%M %p') }}
+                </p>
+                <p style="margin: 0; color: #555; line-height: 1.5;">
+                    {{ post.content[:150] }}{% if post.content|length > 150 %}...{% endif %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+        <div style="text-align: center; margin-top: 15px;">
+            <a href="{{ url_for('posts') }}" style="color: #667eea; text-decoration: none; font-weight: 500;">
+                View all posts →
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <div style="margin-top: 30px; text-align: center;">
+        <div style="background: #f8f9fa; padding: 30px; border-radius: 10px;">
+            <i class="fas fa-newspaper" style="font-size: 3rem; color: #ccc; margin-bottom: 15px;"></i>
+            <h4 style="color: #333; margin: 0 0 10px 0;">No posts yet</h4>
+            <p style="color: #666; margin: 0 0 20px 0;">Start sharing your thoughts with the community!</p>
+            <a href="{{ url_for('create_post') }}" class="btn" style="max-width: 200px; text-decoration: none;">
+                <i class="fas fa-plus"></i> Create Your First Post
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Create Post - Flask App{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px;">
+    <div class="logo">
+        <i class="fas fa-edit"></i>
+        <h1>Create New Post</h1>
+        <p style="color: #666; margin-top: 10px;">Share your thoughts with the community</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('create_post') }}">
+        <div class="form-group">
+            <label for="title">Post Title</label>
+            <input type="text" id="title" name="title" placeholder="Enter your post title..." required>
+            <i class="fas fa-heading"></i>
+        </div>
+
+        <div class="form-group">
+            <label for="content">Post Content</label>
+            <textarea id="content" name="content" placeholder="Write your post content here..." required style="width: 100%; padding: 12px 15px; border: 2px solid #e1e5e9; border-radius: 10px; font-size: 16px; transition: all 0.3s ease; background: #f8f9fa; min-height: 200px; resize: vertical; font-family: inherit;"></textarea>
+        </div>
+
+        <div style="display: flex; gap: 15px; margin-top: 20px;">
+            <button type="submit" class="btn" style="flex: 1;">
+                <i class="fas fa-paper-plane"></i> Publish Post
+            </button>
+            <a href="{{ url_for('posts') }}" class="btn" style="flex: 1; text-align: center; text-decoration: none; background: #6c757d;">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+        </div>
+    </form>
+
+    <div class="links">
+        <p><a href="{{ url_for('posts') }}">← Back to Posts</a> | <a href="{{ url_for('dashboard') }}">Dashboard</a></p>
+    </div>
+</div>
+
+<style>
+    textarea:focus {
+        outline: none;
+        border-color: #667eea;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+</style>
+{% endblock %} 
